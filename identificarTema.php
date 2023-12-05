@@ -40,7 +40,7 @@ function determinarTema($archivo, $conn)
         return 2;
     } else {
         // En caso de empate, puedes manejarlo de acuerdo a tus necesidades
-        return "Empate";
+        return "Tema no identificado";
     }
 }
 

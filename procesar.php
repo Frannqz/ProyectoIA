@@ -63,16 +63,27 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 ?>
 
 <?php include "cabecera.php"; ?>
+<div class="formulario">
+    <h3>Procesar archivos</h3>
+    <p>1 - Religion</p>
+    <p>2 - Deportes</p>
+    <form method="post" enctype="multipart/form-data">
+        <div class="form-group">
+            <label for="archivo" class="form-label mt-4">Seleccionar archivo:</label>
+            <input class="form-control" type="file" accept=".txt" name="archivo" id="archivo" required>
+        </div>
 
-<h2>Procesar Archivo</h2>
-<form method="post" enctype="multipart/form-data">
-    <label for="archivo">Seleccionar Archivo:</label>
-    <input type="file" name="archivo" id="archivo" required>
-    <br>
-    <label for="tema">Tema:</label>
-    <input type="number" name="tema" id="tema" value="1">
-    <br>
-    <input type="submit" value="Procesar">
-</form>
+        <div class="form-group">
+            <label for="tema" class="form-label mt-4">Tema</label>
+            <select class="form-select" id="tema" name="tema" value="1">
+                <option>1</option>
+                <option>2</option>
+            </select>
+        </div>
+        <br>
+        <button type="submit" class="btn btn-primary">Procesar</button>
+    </form>
+</div>
+
 
 <?php include "footer.php"; ?>

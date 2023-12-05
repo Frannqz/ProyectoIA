@@ -1,0 +1,10 @@
+a {
+    text-decoration: none !important;
+    font-weight: 600 !important;
+}
+
+.formulario {
+    width: 50%;
+    margin: 0 auto;
+    padding-top: 3rem;
+}

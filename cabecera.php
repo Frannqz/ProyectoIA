@@ -33,8 +33,8 @@
                             mostrar.php">Mostrar palabras</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link <?php echo (strpos($_SERVER["REQUEST_URI"], "./identificarTema.php") != false) ? "active" : ""; ?>"" href="
-                        ./identificarTema.php">Identificar Tema</a>
+                        <a class="nav-link <?php echo (strpos($_SERVER["REQUEST_URI"], "identificarTema.php") != false) ? "active" : ""; ?>"" href="
+                            identificarTema.php">Identificar Tema</a>
                     </li>
                 </ul>
             </div>

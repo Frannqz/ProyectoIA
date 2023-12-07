@@ -20,10 +20,10 @@ $palabrasExcluidas = array(
     "mientras", "quien", "cual", "cuya", "aquello", "aquel", "aquellos", "aquellas", "cualquiera", "ninguno",
     "alguno", "ambos", "varios", "demás", "muchos", "pocos", "poco", "mucho", "bastante", "demasiado", "tan", "tanto",
     "tanta", "tantos", "tantas", "más", "menos", "además", "inclusive", "exclusivo", "alrededor", "fuera", "dentro", "arriba",
-    "abajo", "encima", "debajo", "delante", "detrás", "cerca", "lejos", "al", "del", "alrededor", "debajo", "encima", "aunque", "ha", "por", "es", "se", "qué","lo"
+    "abajo", "encima", "debajo", "delante", "detrás", "cerca", "lejos", "al", "del", "alrededor", "debajo", "encima", "aunque", "ha", "por", "es", "se", "qué","lo",
+    "sus","sería","ya","tiene","ellos", "están","había","eso","le","era","será","nos","ello","cada","está","estar","mismo","esto","fue","así","muy","pues","entonces"
 );
 
-// Función para procesar el archivo y actualizar la base de datos
 function procesarArchivo($archivo, $tema, $conn, $palabrasExcluidas)
 {
     $contenido = file_get_contents($archivo);
@@ -33,26 +33,26 @@ function procesarArchivo($archivo, $tema, $conn, $palabrasExcluidas)
     $palabrasFiltradas = array_diff($palabras, $palabrasExcluidas);
     $contadorPalabras = array_count_values($palabrasFiltradas);
 
+    // Establecer la cantidad de archivos como una constante
+    $totalArchivos = 15;
+
     foreach ($contadorPalabras as $palabra => $frecuencia) {
-        $stmt = $conn->prepare("SELECT frecuencia FROM palabras WHERE tema = ? AND palabra = ?");
-        $stmt->bind_param("is", $tema, $palabra);
-        $stmt->execute();
-        $stmt->store_result();
+        // Verificar si la palabra ya existe en la base de datos
+        $stmtExistePalabra = $conn->prepare("SELECT COUNT(*) FROM palabras WHERE tema = ? AND palabra = ?");
+        $stmtExistePalabra->bind_param("is", $tema, $palabra);
+        $stmtExistePalabra->execute();
+        $stmtExistePalabra->bind_result($existePalabra);
+        $stmtExistePalabra->fetch();
+        $stmtExistePalabra->close();
 
-        if ($stmt->num_rows > 0) {
-            $frecuenciaExistente = 0;
-            $stmt->bind_result($frecuenciaExistente);
-            $stmt->fetch();
-
-            $frecuenciaCombinada = $frecuencia + $frecuenciaExistente;
-
-            $stmt = $conn->prepare("UPDATE palabras SET frecuencia = ? WHERE tema = ? AND palabra = ?");
-            $stmt->bind_param("iss", $frecuenciaCombinada, $tema, $palabra);
-            $stmt->execute();
-        } else {
-            $stmt = $conn->prepare("INSERT INTO palabras (tema, palabra, frecuencia) VALUES (?, ?, ?)");
-            $stmt->bind_param("iss", $tema, $palabra, $frecuencia);
-            $stmt->execute();
+        if ($existePalabra == 0) {
+            // La palabra no existe, insertar nueva fila
+            $frecuenciaRelativa = ($frecuencia / $totalArchivos);
+            
+            $stmtInsertarPalabra = $conn->prepare("INSERT INTO palabras (tema, palabra, frecuencia, frecuencia_relativa) VALUES (?, ?, ?, ?)");
+            $stmtInsertarPalabra->bind_param("issd", $tema, $palabra, $frecuencia, $frecuenciaRelativa);
+            $stmtInsertarPalabra->execute();
+            $stmtInsertarPalabra->close();
         }
     }
 }

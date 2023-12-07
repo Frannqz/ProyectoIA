@@ -30,14 +30,14 @@
         }
 
         // Consultar palabras por tema en la base de datos
-        $sql = "SELECT tema, palabra, frecuencia FROM palabras WHERE tema = $selected_tema";
+        $sql = "SELECT tema, palabra, frecuencia,frecuencia_relativa FROM palabras WHERE tema = $selected_tema";
         $result = $conn->query($sql);
 
         if ($result->num_rows > 0) {
             // Mostrar los resultados en una tabla con clases de Bootstrap
-            echo "<div class='table-responsive'><table class='table table-bordered table-hover'><thead class='table-dark'><tr><th>Tema</th><th>Palabra</th><th>Frecuencia</th></tr></thead><tbody>";
+            echo "<div class='table-responsive'><table class='table table-bordered table-hover'><thead class='table-dark'><tr><th>Tema</th><th>Palabra</th><th>Frecuencia</th><th>Frecuencia Relativa</th></tr></thead><tbody>";
             while ($row = $result->fetch_assoc()) {
-                echo "<tr><td>" . $row["tema"] . "</td><td>" . $row["palabra"] . "</td><td>" . $row["frecuencia"] . "</td></tr>";
+                echo "<tr><td>" . $row["tema"] . "</td><td>" . $row["palabra"] . "</td><td>" . $row["frecuencia"] . "</td><td>" . $row["frecuencia_relativa"] . "</td></tr>";
             }
             echo "</tbody></table></div>";
         } else {
